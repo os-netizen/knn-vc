@@ -31,6 +31,10 @@ def hifigan_wavlm(pretrained=True, progress=True, prematched=True, device='cuda'
         data = f.read()
     json_config = json.loads(data)
     h = AttrDict(json_config)
+    if torch.cuda.is_available() == False:
+        if str(device) != 'cpu':
+            logging.warning(f"Overriding device {device} to cpu since no GPU is available.")
+            device = 'cpu'
     device = torch.device(device)
 
     generator = HiFiGAN(h).to(device)
