@@ -15,7 +15,7 @@ from hifigan.utils import AttrDict
 from matcher import KNeighborsVC
 
 
-def knn_vc(pretrained=True, progress=True, prematched=True, device='cuda') -> KNeighborsVC:
+def knn_vc(pretrained=True, progress=True, prematched=True, device='cpu') -> KNeighborsVC:
     """ Load kNN-VC (WavLM encoder and HiFiGAN decoder). Optionally use vocoder trained on `prematched` data. """
     hifigan, hifigan_cfg = hifigan_wavlm(pretrained, progress, prematched, device)
     wavlm = wavlm_large(pretrained, progress, device)
@@ -23,7 +23,7 @@ def knn_vc(pretrained=True, progress=True, prematched=True, device='cuda') -> KN
     return knnvc
 
 
-def hifigan_wavlm(pretrained=True, progress=True, prematched=True, device='cuda') -> HiFiGAN:
+def hifigan_wavlm(pretrained=True, progress=True, prematched=True, device='cpu') -> HiFiGAN:
     """ Load pretrained hifigan trained to vocode wavlm features. Optionally use weights trained on `prematched` data. """
     cp = Path(__file__).parent.absolute()
 
@@ -52,7 +52,7 @@ def hifigan_wavlm(pretrained=True, progress=True, prematched=True, device='cuda'
     return generator, h
 
 
-def wavlm_large(pretrained=True, progress=True, device='cuda') -> WavLM:
+def wavlm_large(pretrained=True, progress=True, device='cpu') -> WavLM:
     """Load the WavLM large checkpoint from the original paper. See https://github.com/microsoft/unilm/tree/master/wavlm for details. """
     if torch.cuda.is_available() == False:
         if str(device) != 'cpu':
